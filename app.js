@@ -28,10 +28,19 @@ const ProductController = (function(){
     getData : function(){
       return data;
     },
+    getProductById : function(id){
+      let product = null;
+      data.products.forEach(function (prd){
+        if(prd.id = id){
+          product = prd;
+        }
+      });
+      return product;
+    },
     addProduct : function(name,price){
       let id;
       if(data.products.length>0){
-        id = data.products[data.products.length-1].id+1;
+        id = data.products[data.products.length-1].id + 1;
       }
       else{
         id=0;
@@ -151,7 +160,10 @@ const App = (function (ProductCtrl,UICtrl){
   }
   const editProduct = function(e){
     if (e.target.classList.contains('edit-product')){
-
+      const id =e.target.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
+      // get selected product
+      const product = ProductCtrl.getProductById(id);
+      console.log(product);
     }
 
     e.preventDefault();
