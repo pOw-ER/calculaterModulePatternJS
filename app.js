@@ -62,7 +62,8 @@ const UIController = (function (){
     productPrice:"#productPrice",
     productCard : "#productCard",
     totalTL: '#total-tl',
-    totalDolar: '#total-dolar'
+    totalDolar: '#total-dolar',
+
   }
 
   return {
@@ -75,9 +76,7 @@ const UIController = (function (){
           <td>${prd.name}</td>
           <td>${prd.price} $</td>
           <td class="text-right">
-            <button type="submit" class="btn btn-warning btn-sm">
-              <i class="fas fa-edit"></i>
-            </button>
+            <i class="fas fa-edit edit-product"></i>
           </td>
         </tr>`
       });
@@ -94,9 +93,7 @@ const UIController = (function (){
         <td>${prd.name}</td>
         <td>${prd.price} $</td>
         <td class="text-right">
-          <button type="submit" class="btn btn-warning btn-sm">
-            <i class="fas fa-edit"></i>
-          </button>
+          <i class="fas fa-edit edit-product"></i>
         </td>
       </tr>`
        document.querySelector(Selectors.productList).innerHTML += item;
@@ -125,6 +122,8 @@ const App = (function (ProductCtrl,UICtrl){
   const loadEventListeners = function(){
     // add product event
     document.querySelector(UISelectors.addButton).addEventListener('click',productAddSubmit);
+    // edit product
+    document.querySelector(UISelectors.productList).addEventListener('click',editProduct);
   }
   const productAddSubmit = function(e){
     const productName = document.querySelector(UISelectors.productName).value;
@@ -147,6 +146,13 @@ const App = (function (ProductCtrl,UICtrl){
 
     }
     console.log(productName,productPrice);
+
+    e.preventDefault();
+  }
+  const editProduct = function(e){
+    if (e.target.classList.contains('edit-product')){
+
+    }
 
     e.preventDefault();
   }
