@@ -24,6 +24,16 @@ const StorageController = (function (){
         products = JSON.parse(localStorage.getItem('products'));
       }
       return products;
+    },
+    updateProduct : function (product){
+      let products = JSON.parse(localStorage.getItem('products'));
+
+      products.forEach(function (prd,index){
+        if(product.id == prd.id){
+          products.splice(index,1,product);
+        }
+      });
+      localStorage.setItem('products',JSON.stringify(products));
     }
   }
 })();
@@ -308,6 +318,9 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
 
       //update UI
       let item =UICtrl.updateProduct(updatedProduct);
+
+      // update storage
+      StorageCtrl.updateProduct(updatedProduct);
 
       // get total
       const total = ProductCtrl.getTotal();
