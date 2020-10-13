@@ -149,6 +149,14 @@ const UIController = (function (){
       document.querySelector(Selectors.productName).value = "";
       document.querySelector(Selectors.productPrice).value = "";
     },
+    clearWarnings : function (){
+      const items = document.querySelectorAll(Selectors.productListItems);
+      items.forEach(function (item){
+        if (item.classList.contains('bg-warning')){
+          item.classList.remove('bg-warning');
+        }
+      });
+    },
     hideCard : function (){
       document.querySelector(Selectors.productCard).style.display='none';
     },
@@ -162,9 +170,7 @@ const UIController = (function (){
       document.querySelector(Selectors.productPrice).value = selectedProduct.price;
     },
     addingState : function(item){
-      if(item){
-        item.classList.remove('bg-warning');
-      }
+      UIController.clearWarnings();
       UIController.clearInputs();
       document.querySelector(Selectors.addButton).style.display = 'inline';
       document.querySelector(Selectors.updateButton).style.display = 'none';
@@ -172,10 +178,6 @@ const UIController = (function (){
       document.querySelector(Selectors.cancelButton).style.display = 'none';
     },
     editState : function (tr){
-      const parent = tr.parentNode; // tbody item list (all list)
-      for(let i=0;i<parent.children.length;i++){
-        parent.children[i].classList.remove('bg-warning');
-      }
 
       tr.classList.add('bg-warning');
       document.querySelector(Selectors.addButton).style.display = 'none';
@@ -201,6 +203,9 @@ const App = (function (ProductCtrl,UICtrl){
 
     // edit product submit
     document.querySelector(UISelectors.updateButton).addEventListener('click',editProductSubmit);
+
+    // cancel button click
+    document.querySelector(UISelectors.cancelButton).addEventListener('click',cancelUpdate);
   }
   const productAddSubmit = function(e){
     const productName = document.querySelector(UISelectors.productName).value;
@@ -259,8 +264,15 @@ const App = (function (ProductCtrl,UICtrl){
       //show total
       UICtrl.showTotal(total);
 
-      UICtrl.addingState(item);
+      UICtrl.addingState();
     }
+
+    e.preventDefault();
+  }
+
+  const cancelUpdate = function (e){
+    UICtrl.addingState();
+    UICtrl.clearWarnings();
 
     e.preventDefault();
   }
