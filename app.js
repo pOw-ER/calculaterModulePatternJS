@@ -68,6 +68,13 @@ const ProductController = (function(){
 
       return product;
     },
+    deleteProduct : function (product){
+      data.products.forEach(function(prd,index){
+        if(prd.id == product.id){
+          data.products.splice(index,1);
+        }
+      })
+    },
     getTotal : function (){
       let total = 0;
       data.products.forEach(function(item){
@@ -169,6 +176,14 @@ const UIController = (function (){
       document.querySelector(Selectors.productName).value = selectedProduct.name;
       document.querySelector(Selectors.productPrice).value = selectedProduct.price;
     },
+    deleteProduct : function (){
+      let items = document.querySelectorAll(Selectors.productListItems);
+      items.forEach(function(item){
+        if (item.classList.contains('bg-warning')){
+          item.remove();
+        }
+      });
+    },
     addingState : function(item){
       UIController.clearWarnings();
       UIController.clearInputs();
@@ -206,6 +221,9 @@ const App = (function (ProductCtrl,UICtrl){
 
     // cancel button click
     document.querySelector(UISelectors.cancelButton).addEventListener('click',cancelUpdate);
+
+    // delete button
+    document.querySelector(UISelectors.deleteButton).addEventListener('click',deleteProductSubmit);
   }
   const productAddSubmit = function(e){
     const productName = document.querySelector(UISelectors.productName).value;
@@ -231,6 +249,7 @@ const App = (function (ProductCtrl,UICtrl){
 
     e.preventDefault();
   }
+
   const editProduct = function(e){
     if (e.target.classList.contains('edit-product')){
       const id =e.target.parentNode.previousElementSibling.previousElementSibling.previousElementSibling.textContent;
@@ -238,6 +257,9 @@ const App = (function (ProductCtrl,UICtrl){
       const product = ProductCtrl.getProductById(id);
       // set current product
       ProductCtrl.setCurrentProduct(product);
+
+      // clear bg warning
+      UICtrl.clearWarnings();
 
       // add product to UI
       UICtrl.addProductToForm();
@@ -247,6 +269,7 @@ const App = (function (ProductCtrl,UICtrl){
 
     e.preventDefault();
   }
+
   const editProductSubmit = function (e){
     const productName = document.querySelector(UISelectors.productName).value;
     const productPrice = document.querySelector(UISelectors.productPrice).value;
@@ -277,6 +300,28 @@ const App = (function (ProductCtrl,UICtrl){
     e.preventDefault();
   }
 
+  const deleteProductSubmit = function (e){
+    // get selected product
+    const selectedProduct = ProductCtrl.getCurrentProduct();
+
+    // delete product
+    ProductCtrl.deleteProduct(selectedProduct);
+
+    // delete UI
+    UICtrl.deleteProduct();
+    // get total
+    const total = ProductCtrl.getTotal();
+
+    //show total
+    UICtrl.showTotal(total);
+
+    UICtrl.addingState();
+    if(total == 0){
+      UICtrl.hideCard();
+    }
+
+    e.preventDefault();
+  }
   return {
     init:function(){
       console.log('starting app...');
