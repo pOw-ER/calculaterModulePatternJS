@@ -319,14 +319,14 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
       //update UI
       let item =UICtrl.updateProduct(updatedProduct);
 
-      // update storage
-      StorageCtrl.updateProduct(updatedProduct);
-
       // get total
       const total = ProductCtrl.getTotal();
 
       //show total
       UICtrl.showTotal(total);
+
+      // update storage
+      StorageCtrl.updateProduct(updatedProduct);
 
       UICtrl.addingState();
     }
@@ -350,6 +350,9 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
 
     // delete UI
     UICtrl.deleteProduct();
+
+    // delete data from Storage
+
     // get total
     const total = ProductCtrl.getTotal();
 
