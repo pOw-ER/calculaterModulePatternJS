@@ -34,6 +34,16 @@ const StorageController = (function (){
         }
       });
       localStorage.setItem('products',JSON.stringify(products));
+    },
+    deleteProduct: function (id){
+      let products = JSON.parse(localStorage.getItem('products'));
+
+      products.forEach(function (prd,index){
+        if(id == prd.id){
+          products.splice(index,1);
+        }
+      });
+      localStorage.setItem('products',JSON.stringify(products));
     }
   }
 })();
@@ -84,7 +94,7 @@ const ProductController = (function(){
         id = data.products[data.products.length-1].id + 1;
       }
       else{
-        id=0;
+        id=1;
       }
       const newProduct = new Product(id,name,parseFloat(price));
       data.products.push(newProduct);
@@ -351,15 +361,17 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
     // delete UI
     UICtrl.deleteProduct();
 
-    // delete data from Storage
-
     // get total
     const total = ProductCtrl.getTotal();
 
     //show total
     UICtrl.showTotal(total);
 
+    // delete data from Storage
+    StorageCtrl.deleteProduct(selectedProduct.id);
+
     UICtrl.addingState();
+
     if(total == 0){
       UICtrl.hideCard();
     }
@@ -371,7 +383,8 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
       console.log('starting app...');
 
       UICtrl.addingState();
-      const products = ProductController.getProducts();
+
+      const products = ProductCtrl.getProducts();
 
       if(products.length==0){
         UICtrl.hideCard();
@@ -379,6 +392,12 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
       else{
         UICtrl.createProductList(products);
       }
+
+      // get total
+      const total = ProductCtrl.getTotal();
+
+      // show total
+      UICtrl.showTotal(total);
 
       // Load Event Listeners
       loadEventListeners();
