@@ -124,11 +124,11 @@ const ProductController = (function(){
       if (data.products.length > 0){
         for (i = 1;i<data.products.length+1;i++){
           data.products[i-1].id=i;
-          console.log(data.products);
         }
       }
+      console.log(data.products);
+      UIController.createProductList(data.products);
 
-      return data.products;
     },
     getTotal : function (){
       let total = 0;
@@ -381,8 +381,6 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
     StorageCtrl.deleteProduct(selectedProduct.id);
 
     ProductCtrl.newID();
-
-    UICtrl.newID();
 
     UICtrl.addingState();
 
