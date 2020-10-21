@@ -121,13 +121,20 @@ const ProductController = (function(){
       })
     },
     newID : function (){
-      if (data.products.length > 0){
-        for (i = 1;i<data.products.length+1;i++){
-          data.products[i-1].id=i;
-        }
+      // if (data.products.length > 0){
+      //   for (i = 1;i<data.products.length+1;i++){
+      //     data.products[i-1].id=i;
+      //   }
+      // }
+      // console.log(data.products);
+      // UIController.createProductList(data.products);
+
+      for (i=0; i < data.products.length;i++){
+        data.products[i].id=i+1;
       }
-      console.log(data.products);
-      UIController.createProductList(data.products);
+
+      return data.products;
+
 
     },
     getTotal : function (){
@@ -254,6 +261,21 @@ const UIController = (function (){
       document.querySelector(Selectors.updateButton).style.display = 'inline';
       document.querySelector(Selectors.deleteButton).style.display = 'inline';
       document.querySelector(Selectors.cancelButton).style.display = 'inline';
+    },
+    newIDUI : function (products){
+      let html = '';
+      products.forEach(prd => {
+        html +=`
+        <tr>
+          <td>${prd.id}</td>
+          <td>${prd.name}</td>
+          <td>${prd.price} $</td>
+          <td class="text-right">
+            <i class="fas fa-edit edit-product"></i>
+          </td>
+        </tr>`
+      });
+      document.querySelector(Selectors.productList).innerHTML=html;
     }
   }
 })();
@@ -380,7 +402,9 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
     // delete data from Storage
     StorageCtrl.deleteProduct(selectedProduct.id);
 
+    const productsNewId = ProductCtrl.getProducts();
     ProductCtrl.newID();
+    UICtrl.newIDUI(productsNewId);
 
     UICtrl.addingState();
 
