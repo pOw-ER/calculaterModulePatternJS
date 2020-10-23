@@ -44,6 +44,14 @@ const StorageController = (function (){
         }
       });
       localStorage.setItem('products',JSON.stringify(products));
+    },
+    updateID : function (){
+      let products = JSON.parse(localStorage.getItem('products'));
+      for (i=0; i < products.length;i++){
+        products[i].id=i+1;
+      }
+      localStorage.setItem('products',JSON.stringify(products));
+      return products;
     }
   }
 })();
@@ -405,6 +413,7 @@ const App = (function (ProductCtrl,UICtrl,StorageCtrl){
     const productsNewId = ProductCtrl.getProducts();
     ProductCtrl.newID();
     UICtrl.newIDUI(productsNewId);
+    StorageCtrl.updateID();
 
     UICtrl.addingState();
 
